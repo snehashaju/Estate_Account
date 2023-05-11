@@ -103,27 +103,27 @@ class EstateProperty(models.Model):
                                     ('canceled','Canceled')],
                                    string='Status', default='new')
 
-    def accepted_button(self):
-        for rec in self:
-            for emp in rec.offer_ids:
-                emp.status = 'accepted'
-                if emp.status == 'accepted':
-                    self.write({
-                            'selling_price': emp.price,
-                            'buyer_id' : emp.partner_id.id,
-                            'status' : 'offer_accepted',
-                        })
+    # def accepted_button(self):
+    #     for rec in self:
+    #         for emp in rec.offer_ids:
+    #             emp.status = 'accepted'
+    #             if emp.status == 'accepted':
+    #                 self.write({
+    #                         'selling_price': emp.price,
+    #                         'buyer_id' : emp.partner_id.id,
+    #                         'status' : 'offer_accepted',
+    #                     })
 
-    def refused_button(self):
-        for rec in self:
-            for emp in rec.offer_ids:
-                emp.status = 'refused'
-                if emp.status == 'refused':
-                    self.write({
-                            'selling_price': 0 ,
-                            'buyer_id' :  [('buyer_id','=','')],
-                            'status': 'new',
-                        })
+    # def refused_button(self):
+    #     for rec in self:
+    #         for emp in rec.offer_ids:
+    #             emp.status = 'refused'
+    #             if emp.status == 'refused':
+    #                 self.write({
+    #                         'selling_price': 0 ,
+    #                         'buyer_id' :  [('buyer_id','=','')],
+    #                         'status': 'new',
+    #                     })
 
 
 
@@ -143,6 +143,28 @@ class EstatePropertyOffer(models.Model):
         string='Property Type',
         store=True
     )
+
+    def accepted_button(self):
+        for offer in self:
+            self.status = 'accepted'
+            if self.status == 'accepted':
+                property = offer.property_id
+                property.write({
+                    'buyer_id': self.partner_id.id,
+                    'selling_price': self.price,
+                    'status': 'offer_accepted',
+                })
+
+    def refused_button(self):
+        for offer in self:
+            self.status = 'refused'
+            if self.status == 'refused':
+                property = offer.property_id
+                property.write({
+                    'selling_price': 0 ,
+                    'buyer_id' :  [('buyer_id','=','')],
+                    'status': 'offer_received',
+                 })
 
     def _compute_validity_date(self):
         for offer in self:

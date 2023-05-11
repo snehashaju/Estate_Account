@@ -9,33 +9,30 @@
             <field name="arch" type="xml">
                 <form string="Properties">
                     <header>
-                        <button name="action_sold"  type="object"  string="Sold" class="btn btn-primary"/>
-                        <button name="action_cancel"  type="object"  string="Cancel"/>
+                        <button name="action_sold" type="object" string="Sold" class="btn btn-primary"/>
+                        <button name="action_cancel" type="object" string="Cancel"/>
                         <field name="status" widget="statusbar" options="{'clickable': '1'}"/>
                     </header>
                     <sheet>
                         <h1>
                             <field class="text-break" name="name" default_focus="1" placeholder="e.g. Lumber Inc"/>
                         </h1>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
+                        <field name="tag_ids" widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
                         <group>
-                            <group><br/>
-<!--                                <field name="sold"/>-->
-<!--                                <field name="canceled"/>-->
+                            <group>
+                                <br/>
+
                                 <field name="status_text"/>
                                 <field name="property_type_id"/>
                                 <field name="post_code"/>
                                 <field name="available_from"/>
                             </group>
-                            <group><br/>
-                              <field name="expected_price"/>
+                            <group>
+                                <br/>
+                                <field name="expected_price"/>
                                 <field name="best_offer"/>
                                 <field name="selling_price"/>
-                                <button name="accepted_button" type="object" class="oe_start_button"
-                                                icon="fa-check"/>
-                                <button name="refused_button" type="object" class="oe_start_button"
-                                                icon="fa-times"/>
-
                             </group>
                         </group>
                         <notebook>
@@ -46,34 +43,38 @@
                                         <field name="bedrooms"/>
                                         <field name="living_area"/>
                                         <field name="garage"/>
-                                        <field name="garden" />
+                                        <field name="garden"/>
                                         <field name="garden_area" attrs="{'invisible': [('garden','=',False)] }"/>
                                         <field name="orientation" attrs="{'invisible': [('garden','=',False)] }"/>
                                         <field name="total_area"/>
                                     </group>
                                 </group>
                             </page>
-                             <page string="Offers">
-                                 <group>
-                                     <field name="offer_ids">
-                                         <tree editable="bottom" decoration-danger="status=='refused'" decoration-success="status=='accepted'">
-                                             <field name="property_id"/>
-                                             <field name="property_type_id"/>
-                                             <field name="price"/>
-                                             <field name="partner_id"/>
-                                             <field name="validity"/>
-                                             <field name="deadline"/>
-                                             <field name="status"/>
-                                         </tree>
-                                     </field>
-                                 </group>
+                            <page string="Offers">
+                                <group>
+                                    <field name="offer_ids">
+                                        <tree editable="bottom" decoration-danger="status=='refused'"
+                                              decoration-success="status=='accepted'">
+                                            <field name="property_id"/>
+                                            <field name="property_type_id"/>
+                                            <field name="price"/>
+                                            <field name="partner_id"/>
+                                            <field name="validity"/>
+                                            <field name="deadline"/>
+                                            <button name="accepted_button" type="object" class="oe_start_button"
+                                        icon="fa-check"/>
+                                            <button name="refused_button" type="object" class="oe_start_button"
+                                        icon="fa-times"/>
+                                            <field name="status"/>
+                                        </tree>
+                                    </field>
+                                </group>
                             </page>
-                             <page string="Other Info">
-                                 <group>
-                                     <field name="user_id"/>
-                                     <field name="buyer_id"/>
-
-                                 </group>
+                            <page string="Other Info">
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="buyer_id"/>
+                                </group>
                             </page>
 
                         </notebook>
@@ -83,62 +84,13 @@
             </field>
         </record>
 
-<!--        <record model="ir.ui.view" id="estate_property_kanban_view">-->
-<!--            <field name="name">Estate Property Kanban View</field>-->
-<!--            <field name="model">estate.property</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                <kanban default_group_by="property_type_id" drag_drop="false">-->
-<!--                    <field name="name"/>-->
-<!--                    <field name="status"/>-->
-<!--                    <field name="expected_price"/>-->
-<!--                    <field name="best_offer" attrs="{'invisible': [('status', '!=', 'offer_received')]}"/>-->
-<!--                    <field name="selling_price" invisible="1"-->
-<!--                           attrs="{'invisible': [('status', '!=', 'offer_accepted')]}"/>-->
-<!--                    <field name="tag_ids" widget="many2many_tags"/>-->
-<!--                    <templates>-->
-<!--                        <t t-name="kanban-box">-->
-<!--                            <div t-att-class="'oe_kanban_card oe_kanban_global_' + record.state">-->
-<!--                                <div class="oe_kanban_card_inner">-->
-<!--                                    <div class="oe_kanban_card_header">-->
-<!--                                        <div class="oe_kanban_card_title">-->
-<!--                                            <field name="name"/>-->
-<!--                                        </div>-->
-<!--                                        <div class="oe_kanban_card_footer">-->
-<!--                                            <div class="oe_kanban_card_price oe_kanban_card_expected_price">-->
-<!--                                                 Expected Price: <span><field name="expected_price"/></span>-->
-<!--                                            </div>-->
-<!--                                            <div class="oe_kanban_card_price oe_kanban_card_best_price">-->
-<!--                                                <t t-if="record.best_price != false">-->
-<!--                                                    Best Price:-->
-<!--                                                    <t t-esc="record.best_offer"/>-->
-<!--                                                </t>-->
-<!--                                            </div>-->
-<!--                                            <div class="oe_kanban_card_price oe_kanban_card_selling_price">-->
-<!--                                                <t t-if="record.selling_price != false">-->
-<!--                                                    Selling Price:-->
-<!--                                                    <t t-esc="record.selling_price"/>-->
-<!--                                                </t>-->
-<!--                                            </div>-->
-<!--                                            <div class="oe_kanban_card_tags">-->
-<!--                                                <field name="tag_ids" widget="many2many_tags"/>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </t>-->
-<!--                    </templates>-->
-<!--                </kanban>-->
-<!--            </field>-->
-<!--        </record>-->
-
-
-                <!--kanban view-->
+        <!--kanban view-->
         <record id="view_estate_property_kanban" model="ir.ui.view">
             <field name="name">estate.property.kanban</field>
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
-                <kanban class="o_kanban_mobile" string="Properties" default_group_by="property_type_id" drag_drop="false">
+                <kanban class="o_kanban_mobile" string="Properties" default_group_by="property_type_id"
+                        drag_drop="false">
                     <field name="id"/>
                     <field name="color"/>
                     <field name="status"/>
@@ -146,74 +98,86 @@
                     <field name="best_offer"/>
                     <field name="selling_price" invisible="1"/>
                     <field name="tag_ids" widget="many2many_tags"/>
-                     <templates>
-                         <t t-name="kanban-box">
-                              <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_content oe_kanban_global_click">
 
                                 <div class="o_dropdown_kanban dropdown">
-                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown"
+                                       data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
                                         <span class="fa fa-ellipsis-v"/>
                                     </a>
                                     <div class="dropdown-menu" role="menu">
-                                        <t t-if="widget.editable"><a role="menuitem" type="edit" class="dropdown-item">Edit</a></t>
-                                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                                        <t t-if="widget.editable">
+                                            <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                        </t>
+                                        <t t-if="widget.deletable">
+                                            <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                        </t>
                                         <ul class="oe_kanban_colorpicker" data-field="color"/>
                                     </div>
                                 </div>
-                                  <div>
+                                <div>
                                     <strong class="o_kanban_record_title">
-                                      <strong>  Name : <span><field name="name"/></span></strong><br/>
+                                        <strong>Name :
+                                            <span>
+                                                <field name="name"/>
+                                            </span>
+                                        </strong>
+                                        <br/>
 
                                     </strong>
-                                  </div>
-                                  <div>
-                                      <span class="o_kanban_record_subtitle">
-                                          Expected Price: <span><field name="expected_price"/></span>
-                                      </span>
-                                  </div>
-                                  <div>
-                                      <span class="o_kanban_record_subtitle">
-                                          Best Offer :
-                                          <span>
-                                              <field name="best_offer"
-                                                     attrs="{'invisible': [('status', '!=', 'offer_received')]}"/>
-                                          </span>
-                                      </span>
-                                  </div>
-                                  <div>
-                                      <span class="o_kanban_record_subtitle">
-                                          <t t-if="record.selling_price != false">
-                                              Selling Price :
-                                              <span>
-                                                  <field name="selling_price"
-                                                         attrs="{'invisible': [('status', '!=', 'offer_accepted')]}"/>
-                                              </span>
-                                          </t>
-                                      </span>
-                                  </div>
-                                  <div>
-                                      <span class="o_kanban_record_subtitle">
+                                </div>
+                                <div>
+                                    <span class="o_kanban_record_subtitle">
+                                        Expected Price:
+                                        <span>
+                                            <field name="expected_price"/>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div attrs="{'invisible': [('status', '!=', 'offer_received')]}">
+                                    <span class="o_kanban_record_subtitle">
+                                        Best Offer :
+                                        <span>
+                                            <field name="best_offer"/>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div attrs="{'invisible': [('status', '!=', 'offer_accepted')]}">
+                                    <span class="o_kanban_record_subtitle">
+                                        <t t-if="record.selling_price != false">
+                                            Selling Price :
+                                            <span>
+                                                <field name="selling_price"/>
+                                            </span>
+                                        </t>
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="o_kanban_record_subtitle">
                                         <field name="tag_ids" widget="many2many_tags"/>
-                                      </span>
-                                  </div>
-                              </div>
-                         </t>
-                     </templates>
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
                 </kanban>
             </field>
         </record>
 
-         <!--Search-->
+        <!--Search-->
         <record id="view_estate_property_search" model="ir.ui.view">
             <field name="name">estate_property.search</field>
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
                 <search string="Properties">
-                     <field name="living_area" string="Living Area" filter_domain="[('living_area', '>=', self)]"/>
+                    <field name="living_area" string="Living Area" filter_domain="[('living_area', '>=', self)]"/>
                     <separator/>
-                        <filter string="Available" name="status" domain="[('status','=', 'offer_accepted')]"/>
+                    <filter string="Available" name="status" domain="[('status','=', 'offer_accepted')]"/>
                     <group expand="1" string="Group By">
-                        <filter name="group_post_code" string="Postcode" domain="[]" context="{'group_by':'post_code'}"/>
+                        <filter name="group_post_code" string="Postcode" domain="[]"
+                                context="{'group_by':'post_code'}"/>
                     </group>
                 </search>
             </field>
@@ -224,7 +188,8 @@
             <field name="name">estate_property.tree</field>
             <field name="model">estate.property</field>
             <field name="arch" type="xml">
-                <tree string="Properties" decoration-success="status=='offer_received' or 'offer_accepted'" decoration-bf="status=='offer_accepted'" decoration-muted="status=='sold'">
+                <tree string="Properties" decoration-success="status=='offer_received' or 'offer_accepted'"
+                      decoration-bf="status=='offer_accepted'" decoration-muted="status=='sold'">
                     <field name="name"/>
                     <field name="property_type_id"/>
                     <field name="post_code"/>
@@ -243,7 +208,8 @@
             <field name="name">estate_property_offer.tree</field>
             <field name="model">estate.property.offer</field>
             <field name="arch" type="xml">
-                <tree string="Properties" decoration-success="status=='offer_received'" decoration-bf="status=='offer_accepted'">
+                <tree string="Properties" decoration-success="status=='offer_received'"
+                      decoration-bf="status=='offer_accepted'">
                     <field name="price"/>
                     <field name="partner_id"/>
                     <field name="validity"/>
@@ -271,7 +237,8 @@
         <!--Menus-->
         <menuitem id="estate_menu" name="Real Estate" sequence="1"/>
         <menuitem id="advertisement_menu" name="Advertisement" sequence="4" parent="estate_menu"/>
-        <menuitem id="properties_menu" name="Properties" sequence="1" action="action_estate_property" parent="advertisement_menu"/>
+        <menuitem id="properties_menu" name="Properties" sequence="1" action="action_estate_property"
+                  parent="advertisement_menu"/>
 
     </data>
 </odoo>
